@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Chat App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body><script type="module" src="signus.js"></script>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Supabase Chat</h2>
+            <p>Already have an account? <a href="login.html">Log In</a></p>
+        </div>
+        <div class="chat-output" id="chat-output"></div>
+        <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.12.0';
+
+   
+        // Initialize Supabase
+        const supabaseUrl = 'https://sinwaxncwvyrsznnqotl.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNpbndheG5jd3Z5cnN6bm5xb3RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTQxNTY0MzUsImV4cCI6MjAwOTczMjQzNX0.9Nm0gJDE7_sZQt_IvlGtaLRu8qdd9AtU_7oigJf-3WE';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatOutput = document.getElementById('chat-output');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const signOutButton = document.getElementById('sign-out-button');
+
+            // Function to load chat messages from Supabase
+            async function loadChat() {
+                // Implement Supabase query to retrieve chat messages
+                const { data, error } = await supabase
+                    .from('messages')
+                    .select('*')
+                    .order('timestamp', { ascending: true });
+
+                if (error) {
+                    console.error('Error loading messages:', error.message);
+                    return;
+                }
+
+                // Display messages in chatOutput
+                chatOutput.innerHTML = data
+                    .map((message) => `<div>${message.sender}: ${message.message}</div>`)
+                    .join('');
+            }
+
+            // Function to send an instant message to Supabase
+            async function sendMessage() {
+                const message = messageInput.value.trim();
+                if (!message) return;
+
+                const { data, error } = await supabase
+                    .from('messages')
+                    .insert([
+                        {
+                            sender: 'YourUsername', // Replace with the sender's username
+                            message: message,
+                        },
+                    ]);
+
+                if (error) {
+                    console.error('Error sending message:', error.message);
+                }
+
+                messageInput.value = '';
+                loadChat();
+            }
+
+            // Function to sign out
+            function signOut() {
+                // Implement Supabase sign-out logic
+                // Redirect to the sign-in page or handle sign-out as needed
+            }
+
+            // Event listeners
+            sendButton.addEventListener('click', sendMessage);
+            signOutButton.addEventListener('click', signOut);
+
+            // Load chat messages on page load
+            loadChat();
+        });
+    </script>
+	<script src="script.js"></script>
+</body>
+</html>
