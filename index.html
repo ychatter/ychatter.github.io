@@ -6,6 +6,29 @@
     <title>قراصنة المجره</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+    // Function to retrieve the user's IP address
+    function getUserIP() {
+        fetch("get_ip.php")
+            .then(response => response.json())
+            .then(data => {
+                const userIP = data.ip;
+                console.log("User's IP address:", userIP);
+                
+                // You can use the user's IP address as needed
+            })
+            .catch(error => {
+                console.error("Error retrieving IP address:", error);
+            });
+    }
+
+    // Call the getUserIP() function when the page loads
+    getUserIP();
+
+    // ... (rest of your code) ...
+});
+</script>
 
 </head>
 <body>
@@ -20,8 +43,8 @@
         <div class="user-input">
             <input type="file" accept="image/*" id="avatar-input" style="display: none;">
             <button id="upload-avatar-button">تحميل صورة البروفايل</button>
-            <input type="text" id="username-input" placeholder="اسم المستخدم" />
-            <button id="set-username-button">تعيين الاسم</button>
+<input type="text" id="username-input" placeholder="اسم المستخدم" />
+<button id="set-username-button">تعيين الاسم</button>
         </div>
         <div class="chat-messages" id="chat-messages">
             <!-- الرسائل ستظهر هنا -->
